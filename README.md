@@ -13,6 +13,6 @@ Layer 2 | 8 | 4 | 3 | 2
 Layer 3 | 8 | 6 | 3 | 2
 Layer 4 | 2 | 8 | 4 | 2    
 
-The number of capsules in the last layer matches the number of classes in the training dataset (subset of two digits from MNIST dataset). The model is trained without labels, so after the training is finished, capsules in the last layer need to be assigned to the classes. There are two possibilities of such assignment and the one with the highest accuracy is chosen. This model trained without labels reached 79% test accuracy.
+The number of capsules in the last layer matches the number of classes in the training dataset (subset of two digits from MNIST dataset). The model is trained without labels, so after the training is finished, capsules in the last layer need to be assigned to the classes. There are two possibilities of such assignment and the one with the highest accuracy is chosen. This model trained without labels reached 90.8% test accuracy when tested on the images cropped at the center to 22x22. The test images were cropped so that the last layer uses only two capsules, one per capsule channel, that is the output of the last layer has width and height equal to 1.
 
 I tried to train another model on a subset of four digits from MNIST dataset, but I didn't get any meaningful result in reasonable time.

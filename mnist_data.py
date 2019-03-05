@@ -28,14 +28,15 @@ class MnistData:
         Creates a data loader.
 
         Args:
-            batch_size (int): How many samples per batch to load.
+            batch_size (int): How many samples per batch to load. ``-1`` means that all samples will be loaded in a
+                single batch.
             train (bool): If ``True``, creates training data loader, otherwise test data loader.
-            shuffle (bool): Whether to reshuffle the samples as every epoch.
+            shuffle (bool): Whether to reshuffle the samples at every epoch.
             transform (callable, optional): A function that takes a PIL image and returns a transformed version.
             num_workers (int, optional): How many subprocesses to use for data loading. ``0`` means that the data will
                 be loaded in the main process (default: ``0``).
-            digits (sequence of ints, optional): What digits to load. ``None`` means that all digits will be loaded.
-                (default: ``None``)
+            digits (sequence of ints, optional): What digits to load. ``None`` means that all digits will be loaded
+                (default: ``None``).
 
         Returns:
             New data loader.
@@ -60,10 +61,29 @@ class MnistData:
                 data_set.test_data = data_set.test_data[mask]
                 data_set.test_labels = data_set.test_labels[mask]
 
+        if batch_size == -1:
+            batch_size = len(data_set.test_data)
+
         return torch.utils.data.DataLoader(data_set, batch_size=batch_size, shuffle=shuffle,
                                            num_workers=num_workers, pin_memory=True, drop_last=True)
 
     def plain_loader(self, batch_size, train, shuffle=False, num_workers=_default_num_workers, digits=None):
+        """
+        Creates a data loader which provides original full-size samples.
+
+        Args:
+            batch_size (int): How many samples per batch to load. ``-1`` means that all samples will be loaded in a
+                single batch.
+            train (bool): If ``True``, creates training data loader, otherwise test data loader.
+            shuffle (bool): Whether to reshuffle the samples at every epoch (default: ``False``).
+            num_workers (int, optional): How many subprocesses to use for data loading. ``0`` means that the data will
+                be loaded in the main process (default: ``0``).
+            digits (sequence of ints, optional): What digits to load. ``None`` means that all digits will be loaded
+                (default: ``None``).
+
+        Returns:
+            New data loader.
+        """
         return self.data_loader(batch_size, train, shuffle, transform=PlainTransform(), num_workers=num_workers,
                                 digits=digits)
 
@@ -74,14 +94,15 @@ class MnistData:
 
         Args:
             sample_grid_size (sequence of ints) : Height and width of each sample.
-            batch_size (int): How many samples per batch to load.
+            batch_size (int): How many samples per batch to load. ``-1`` means that all samples will be loaded in a
+                single batch.
             train (bool): If ``True``, creates training data loader, otherwise test data loader.
-            shuffle (bool): Whether to reshuffle the samples as every epoch (default: ``True``).
+            shuffle (bool): Whether to reshuffle the samples at every epoch (default: ``True``).
             previous_layers: Sequence of layers the input image is processed by to create a sample.
             num_workers (int, optional): How many subprocesses to use for data loading. ``0`` means that the data will
                 be loaded in the main process (default: ``0``).
-            digits (sequence of ints, optional): What digits to load. ``None`` means that all digits will be loaded.
-                (default: ``None``)
+            digits (sequence of ints, optional): What digits to load. ``None`` means that all digits will be loaded
+                (default: ``None``).
 
         Returns:
             New data loader.
